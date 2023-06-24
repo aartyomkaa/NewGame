@@ -66,14 +66,9 @@ public class Enemy : MonoBehaviour
     {
         _hasTookHit = true;
 
-        float timePassed = 0;
+        var waitSeconds = new WaitForSeconds(_hitRecoveryTime);
 
-        while (timePassed < _hitRecoveryTime)
-        {
-            timePassed += Time.deltaTime;
-
-            yield return Time.deltaTime;
-        }
+        yield return waitSeconds;
 
         _hasTookHit = false;
     }

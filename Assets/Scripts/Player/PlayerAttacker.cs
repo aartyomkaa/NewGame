@@ -16,7 +16,7 @@ public class PlayerAttacker : MonoBehaviour
     private Coroutine _attackDelayCoroutine;
     private Coroutine _attackTimeCoroutine;
 
-    private float _timePassed;
+    private bool _hasAttacked;
     private int _animatorAttack = Animator.StringToHash("Attack");
 
     private void Awake()
@@ -28,8 +28,6 @@ public class PlayerAttacker : MonoBehaviour
         _audioSource = GetComponent<AudioSource>();
 
         _playerInput.Player.Attack.performed += ctx => OnAttack();
-
-        _timePassed = _attackDelay;
     }
 
     private void OnDisable()
@@ -39,7 +37,7 @@ public class PlayerAttacker : MonoBehaviour
 
     private void OnAttack()
     {
-        if (_timePassed >= _attackDelay)
+        if (_hasAttacked == false)
         {
             SetSwordCollider();
 
@@ -69,26 +67,20 @@ public class PlayerAttacker : MonoBehaviour
 
     private IEnumerator AttackDelay(float attackDelay)
     {
-        _timePassed = 0;
+        _hasAttacked = true;
 
-        while (_timePassed < _attackDelay)
-        {
-            _timePassed += Time.deltaTime;
+        var waitSeconds = new WaitForSeconds(attackDelay);
 
-            yield return Time.deltaTime;
-        }
+        yield return waitSeconds;
+
+        _hasAttacked = false;
     }
 
     private IEnumerator AttackTime(float attackTime)
     {
-        float timePassed = 0;
+        var waitSeconds = new WaitForSeconds(attackTime);
 
-        while (timePassed < _attackTime)
-        {
-            timePassed += Time.deltaTime;
-
-            yield return Time.deltaTime;
-        }
+        yield return waitSeconds;
 
         _sword.DisableCollider();
     }

@@ -5,7 +5,7 @@ public class TargetFollower : MonoBehaviour
     [SerializeField] private Transform _targetTransform;
     [SerializeField] private Vector3 _cameraOffset;
 
-    private void Update()
+    private void LateUpdate()
     {
         Vector3 newPosition = _targetTransform.position + _cameraOffset;
         transform.position = newPosition;

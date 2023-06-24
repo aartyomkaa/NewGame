@@ -19,8 +19,7 @@ public class MoveState : State
     {
         transform.position = Vector3.MoveTowards(transform.position, Target.transform.position, _speed * Time.deltaTime);
 
-        Vector3 relativePosition = Target.transform.position - transform.position;
-        transform.rotation = Quaternion.LookRotation(relativePosition, Vector3.up);
+        LookAtTarget();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -29,6 +28,12 @@ public class MoveState : State
         {
             MoveAway();
         }
+    }
+
+    private void LookAtTarget()
+    {
+        Vector3 relativePosition = Target.transform.position - transform.position;
+        transform.rotation = Quaternion.LookRotation(relativePosition, Vector3.up);
     }
 
     private void MoveAway()

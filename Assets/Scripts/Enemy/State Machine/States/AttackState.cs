@@ -1,8 +1,8 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Animator))]
+[RequireComponent(typeof(AudioSource))]
 public class AttackState : State
 {
     [SerializeField] private float _delay;
@@ -27,6 +27,8 @@ public class AttackState : State
 
     private void Update()
     {
+        LookAtTarget();
+
         if (_lastAttackTime <= 0)
         {
             Attack(Target);
@@ -45,6 +47,12 @@ public class AttackState : State
 
             transform.position =  Vector3.MoveTowards(transform.position, new Vector3(transform.position.x + random, transform.position.y, transform.position.z + random), 4 * Time.deltaTime);
         }
+    }
+
+    private void LookAtTarget()
+    {
+        Vector3 relativePosition = Target.transform.position - transform.position;
+        transform.rotation = Quaternion.LookRotation(relativePosition, Vector3.up);
     }
 
     private void Attack(Player player)
@@ -70,14 +78,9 @@ public class AttackState : State
 
     private IEnumerator AttackTime(float attackTime)
     {
-        float timePassed = 0;
+        var waitSeconds = new WaitForSeconds(attackTime);
 
-        while (timePassed < _attackTime)
-        {
-            timePassed += Time.deltaTime;
-
-            yield return Time.deltaTime;
-        }
+        yield return waitSeconds;
 
         _sword.DisableCollider();
     }

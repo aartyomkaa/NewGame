@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Game : MonoBehaviour
+public class MenuManager : MonoBehaviour
 {
     [SerializeField] private Player _player;
     [SerializeField] private PlayerRotater _playerRotater;
